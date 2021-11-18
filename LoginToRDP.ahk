@@ -1,16 +1,16 @@
 ﻿#NoEnv    
 #Persistent
 #SingleInstance, Force
-;SetBatchLines, -1 
+SetBatchLines, -1 
 ;SetWinDelay -1 
 SetWorkingDir %A_ScriptDir%
-;#include <Vis2>
-;#include <Gdip_All>
+#include <Vis2>
+#include <Gdip_All>
 #Include <FindText>
 ;SetKeyDelay, 50
 
 accname:="|<>*116$71.zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzttzyzzzzzzzzXnzxzzzzzzzz7bzvzzzzzzzybAkkS4wzzzztiHDaPYvzzzznACTSz9bzzzziMySxkPTzzzy0kyBvAkzzzzwwZzPotVzzzzvt9irhXbzzzzbuM1jM7Dzzzzzzzzzzyzzzzzzzzzzztzzzzzzzzzzz7zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
-;closemar:="|<>*130$71.zzzzzzzzzzzy0000000000000Dk600000002fzuieeeeeeeU71sM00000000Q0kk00000000k1lUT0T0DU03U031z1zUzU0600677733VU0A00AQ7A661U0M00Mk6Q0M300k00lUATUzy01U01X0MTlzw03U1X60k7n0003076A1U1a00070AAQ7A3C1U071sMQQQCC7007zUkTkTsDw003w1UT0TUDU0eeeeeeeeeeec00000000000000000000000DzzzzzzzzzzzU00000000000000000000001"
+closemar:="|<>*130$71.zzzzzzzzzzzy0000000000000Dk600000002fzuieeeeeeeU71sM00000000Q0kk00000000k1lUT0T0DU03U031z1zUzU0600677733VU0A00AQ7A661U0M00Mk6Q0M300k00lUATUzy01U01X0MTlzw03U1X60k7n0003076A1U1a00070AAQ7A3C1U071sMQQQCC7007zUkTkTsDw003w1UT0TUDU0eeeeeeeeeeec00000000000000000000000DzzzzzzzzzzzU00000000000000000000001"
 
 
 if FileExist("\\A1-server\d")
@@ -29,11 +29,7 @@ Run, C:\Users\Prafull\Desktop\A1-server.rdp
 sleep 5000
 
 
-
-
-
 t1:=A_TickCount, X:=Y:=""
-
 
 if (ok:=FindText(X, Y, 723-150000, 551-150000, 723+150000, 551+150000, 0, 0, accname))
 {
@@ -108,8 +104,6 @@ AccClick()
     MsgBox, not found
   }
   */
- 
-
 
 
   return
