@@ -46,7 +46,7 @@ Send {Blind}akshay
 sleep 200
 send {Tab}
 sleep 500
-send {Blind}123
+send {Blind}####123
 sleep 400
 send {enter}
 sleep 400
