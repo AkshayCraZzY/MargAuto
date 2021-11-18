@@ -1,2 +1,2 @@
-# Marg-Auto
+# MargAuto
 Script for automating MargERP software
