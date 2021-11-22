@@ -13,14 +13,25 @@ accname:="|<>*116$71.zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 closemar:="|<>*130$71.zzzzzzzzzzzy0000000000000Dk600000002fzuieeeeeeeU71sM00000000Q0kk00000000k1lUT0T0DU03U031z1zUzU0600677733VU0A00AQ7A661U0M00Mk6Q0M300k00lUATUzy01U01X0MTlzw03U1X60k7n0003076A1U1a00070AAQ7A3C1U071sMQQQCC7007zUkTkTsDw003w1UT0TUDU0eeeeeeeeeeec00000000000000000000000DzzzzzzzzzzzU00000000000000000000001"
 
 
-if FileExist("\\A1-server\d")
+ver=1.2
+
+FindSv:
 {
-  ;msgbox, found
-}
-Else
-{
-  msgbox, Unable to connect A1-Server
-  exitapp
+  if FileExist("\\A1-server\d")
+  {
+    ;msgbox, found
+  }
+  Else
+  {
+    msgbox, 21,MargAuto v%ver% Aashirwad Agencies,Unable to connect.`nA1-SERVER
+    ifMsgbox Cancel
+      ExitApp
+    ifMsgbox Retry
+    {
+      sleep 500
+      Goto, FindSv
+    }
+  }
 }
 
 
