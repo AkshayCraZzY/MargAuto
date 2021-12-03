@@ -4,7 +4,7 @@
 SetWorkingDir %A_ScriptDir%
 #include <Vis2>
 #include <Gdip_All>
-ver=1.2
+ver=1.3
 golecash=%A_WorkingDir%\golecash.jpg
 stkisu=%A_WorkingDir%\stkisu.jpg
 stkisulst=%A_WorkingDir%\stkisulst.jpg
