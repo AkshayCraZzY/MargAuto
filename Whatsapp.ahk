@@ -1,11 +1,9 @@
-;;;;; todo snum proper
-
 
 #NoEnv
 #Persistent
 #SingleInstance, Force
 SetWorkingDir %A_ScriptDir%
-#include <Vis2>
+;#include <Vis2>
 #include <Gdip_All>
 log("`n\\\\\\\\\\\\NEW SESSION\\\\\\\\\\\\")
 ver=1.2
@@ -29,9 +27,19 @@ pNum:=Gdip_CloneBitmapArea(pBitmap,1615,121,97,16)
 pNum1 := ResizeBitmap(pNum, 600)	
 Gdip_SaveBitmapToFile(pName,sName)
 Gdip_SaveBitmapToFile(pNum1,sNum)
-tosend:=OCR(sNum)
-tosave:=OCR(sName)
-MsgBox, 70,, Number is %tosend%`nName is %tosave%,6
+
+RunWait %comspec% /c  "%A_WorkingDir%\c2t\Capture2Text_CLI.exe  -i %sNum% -i %sName% > %A_WorkingDir%\OCR.txt",,hide,Pid
+sleep 100
+FileReadLine, line1, D:\Akshay\AHK\OCR.txt, 1
+FileReadLine, line2, D:\Akshay\AHK\OCR.txt, 2
+line1:=RegExReplace(line1,"[^\w]","")
+line2:=RegExReplace(line2,"[^\w]","")
+
+tosend:=line1
+tosave:=line2
+
+
+MsgBox, 70,, Number is %tosend%`nName is %tosave%,2
 IfMsgBox Cancel
 {
 	ExitApp
@@ -44,6 +52,7 @@ else IfMsgBox Continue
 {
 
 }
+SLEEP 600
 ;msgbox,% tosave:=OCR(sName)
 log("Identified--`nName:"tosave . "`nNumber:"tosend . "`n\\\\\\\\\\\\")
 MouseClick,left,1190,866
@@ -150,6 +159,7 @@ dialog:
 				proc.terminate()
 			log("Excel opened from Marg closed`n\\\\\\\\\\\\")
 			FullFilePath := legloc . tosave . ".XLS"
+			ToolTip,% FullFilePath
 			if !FileExist(FullFilePath)
    				MsgBox, The excel file does not exist.
 			Else	
