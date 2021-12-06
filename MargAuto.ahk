@@ -4,7 +4,8 @@
 SetWorkingDir %A_ScriptDir%
 #include <Vis2>
 #include <Gdip_All>
-ver=1.3
+ver=1.4
+
 golecash=%A_WorkingDir%\golecash.jpg
 stkisu=%A_WorkingDir%\stkisu.jpg
 stkisulst=%A_WorkingDir%\stkisulst.jpg
@@ -18,7 +19,7 @@ Gui, Add, Button, 		x111 y24 w90 h35 gButtonExit vClose, Close Marg
 Gui, Add, Button, 		x111 y64 w90 h25 gReset, Reset
 Gui, Add, GroupBox, 	x7 y99 w200 h50 , Functions :
 Gui, Add, Radio, 		x22 y119 w70 h20 vfunct gFunc, Cash Sale
-Gui, Add, Radio, 		x92 y119 w80 h20 gFunc, Whatsapp
+Gui, Add, Radio, 		x92 y119 w80 h20 vWhtsp gFunc, Whatsapp
 Gui, Add, GroupBox, 	x7 y149 w200 h50 vBranchgrp, Branch :
 Gui, Add, Radio, 		x22 y169 w50 h20 vGoleOption gBranchFunc, Gole
 Gui, Add, Radio, 		x75 y169 w60 h20 vNskrdOption gBranchFunc, NskRD
@@ -79,12 +80,23 @@ GuiControlGet,datevis, Visible , Date
 
 Func:
 {
-	GuiControl, show, Branchgrp
-	GuiControl, show, GoleOption
-	GuiControl, show, NskrdOption
-	GuiControl, show, GanjOption
-	Gui, Show, Autosize
-	return
+	Gui, Submit, NoHide
+	if (whtsp)
+	{
+		GuiControl, show, Exec
+		Gui, Show, Autosize
+	}
+	if (funct)
+	{
+		GuiControl, show, Branchgrp
+		GuiControl, show, GoleOption
+		GuiControl, show, NskrdOption
+		GuiControl, show, GanjOption
+		Gui, Show, Autosize
+	}
+	
+		
+		return
 }
 
 BranchFunc:
@@ -294,9 +306,11 @@ if (funct = 1)
 	pBitmap:=Gdip_BitmapFromScreen()
 	pBitmap_part:=Gdip_CloneBitmapArea(pBitmap,375,771,107,30) 
 	Gdip_SaveBitmapToFile(pBitmap_part,golecash)
-
-	;SLEEP 2000
-	gole:=OCR(golecash)
+	;gole:=OCR(golecash)
+	clipboard := ""
+	RunWait %comspec% /c  "%A_WorkingDir%\c2t\Capture2Text_CLI.exe  -i %golecash% | clip",,hide,Pid
+	gole := clipboard
+	gole:=RegExReplace(gole,"[^\w]","")
 	G1= Gole Cash : `t`t%gole%`n
 	GuiControl, ,Output,%G1%
 	GuiControl, MoveDraw, Output, h20
@@ -383,12 +397,28 @@ if (funct = 1)
 	Gdip_SaveBitmapToFile(pBitmap_part,stkisu)
 
 	stockissue:=OCR(stkisu)
+	/*
+	clipboard := ""
+	RunWait %comspec% /c  "%A_WorkingDir%\c2t\Capture2Text_CLI.exe  -i %stkisu% | clip",,hide,Pid
+	stockissue := clipboard
+	stockissue:=RegExReplace(stockissue,"[^\w]","")		
+	*/
+
+
 	MyArray := StrSplit(RegExReplace(stockissue, "[^\d`n]*"), "`n")
 
 	pBitmap:=Gdip_BitmapFromScreen()
 	pBitmap_part:=Gdip_CloneBitmapArea(pBitmap,954,802,110,30) 
 	Gdip_SaveBitmapToFile(pBitmap_part,stkisulst)
-	stockissuelast:=OCR(stkisulst)
+
+
+	;stockissuelast:=OCR(stkisulst)
+	
+	clipboard := ""
+	RunWait %comspec% /c  "%A_WorkingDir%\c2t\Capture2Text_CLI.exe  -i %stkisulst% | clip",,hide,Pid
+	stockissuelast := clipboard
+	stockissuelast:=RegExReplace(stockissuelast,"[^\w]","")
+	
 
 	MyArray.Push(stockissuelast)
 
@@ -434,11 +464,8 @@ if (funct = 1)
 }
 if (funct = 0)
 {
-	InputBox, UserInput, Phone Number, Please enter a phone number., , 640, 480
-if ErrorLevel
-    MsgBox, CANCEL was pressed.
-else
-    MsgBox, You entered "%UserInput%"
+	;msgbox whatsapp
+	RunWait,whatsapp.ahk
 	return
 }
 
