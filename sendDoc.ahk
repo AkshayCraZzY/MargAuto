@@ -1,4 +1,4 @@
-﻿#NoEnv
+#NoEnv
 #Persistent
 #SingleInstance, Force
 SetWorkingDir %A_ScriptDir%
@@ -12,6 +12,16 @@ StringTrimLeft, filename, path, 17
 folder:=SubStr(path,1, 17)
 ;MsgBox % folder
 log("Folder : " folder . "`nFilename : "filename . "`n\\\\\\\\\\\\")
+
+if not WinExist("ahk_exe chrome.exe")
+{
+	;RETURN
+}
+Else
+{
+	WinActivate
+	;RETURN
+}
 WinWait, ahk_class #32770,, 1
 if ErrorLevel
 {
@@ -20,7 +30,7 @@ if ErrorLevel
 Else
 {  
     WinActivate
-    sleep 400
+    sleep 700
     send !d
     sleep 600
     SendInput, % folder
