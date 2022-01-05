@@ -4,7 +4,7 @@
 SetWorkingDir %A_ScriptDir%
 #include <Vis2>
 #include <Gdip_All>
-ver=1.7
+ver=1.8
 
 golecash=%A_WorkingDir%\golecash.jpg
 stkisu=%A_WorkingDir%\stkisu.jpg
@@ -29,7 +29,7 @@ Gui, Add, CheckBox, 	x22 y202 w180 h20 gCusDate vDateCheck , Custom Date (Skip i
 custdate:=A_DD-2 . "/" . A_MM
 ;Gui, Add, Edit, x24 y229 w170 h21 r1 vDate, %custdate%/%A_MM%
 Gui, Add, Edit, x22 y222 w170 h20 r1 vDate, %custdate%
-Gui, Add, Button, x32 y224 w140 h35 vExec gMain, Execute
+Gui, Add, Button, x32 y224 w140 h35 vExec gMain Default , Execute
 Gui, Add, Text, x22 y269 w180 h60 vOutput,
 ;Gui, Add, Text, x22 y289 w180 h30 vOutput, Output :
 
@@ -267,6 +267,14 @@ else if(ErrorLevel==2)
         if(A_Index == 3)
             Yearr = % A_LoopField  
     }
+	if(StrLen(Yearr)=2)
+		Yearr:= Yearr+2000
+	Else if(StrLen(Yearr)=3 or StrLen(Yearr)=1)
+	{
+		msgbox, Invalid Year
+		Run,D:\Akshay\AHK\RUN.ahk
+		Exitapp
+	}
     FormatTime, date,%Yearr%%Montth%%datte%,ddd
     if (date == "Sun")
 	{
@@ -382,7 +390,7 @@ if (funct = 1)
 	send {Enter}
 	sleep 100 
 	send {Enter}
-	SLEEP 300
+	SLEEP 600
 	pToken:=Gdip_Startup()
 	pBitmap:=Gdip_BitmapFromScreen()
 	pBitmap_part:=Gdip_CloneBitmapArea(pBitmap,375,771,107,30) 
@@ -438,7 +446,7 @@ if (funct = 1)
 			loop,2
 			{
 				send,% Date
-				sleep 150
+				sleep 250
 				Send {Enter}
 			}
 	}
