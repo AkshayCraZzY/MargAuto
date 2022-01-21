@@ -12,7 +12,7 @@ Instagram : https://www.instagram.com/akki_parakh
 SetWorkingDir %A_ScriptDir%
 #include <Vis2>
 #include <Gdip_All>
-ver=1.8
+ver=2.1
 
 golecash=%A_WorkingDir%\golecash.jpg
 stkisu=%A_WorkingDir%\stkisu.jpg
@@ -20,10 +20,13 @@ stkisulst=%A_WorkingDir%\stkisulst.jpg
 pToken:=Gdip_Startup()
 SetKeyDelay, 50
 OnMessage(0x201, "WM_LBUTTONDOWN")
+;OnMessage(0x84, "WM_NCHITTEST")
+;OnMessage(0x83, "WM_NCCALCSIZE")
 Gui,+AlwaysOnTop +caption +LastFound +ToolWindow
 Gui, Add, GroupBox, 	x7 y4 w200 h89 , @github.com/akshaycrazzy
 Gui, Add, Button, 		x12 y24 w90 h35 gStartMarg vStart, Start Marg
 Gui, Add, Button, 		x111 y24 w90 h35 gButtonExit vClose, Close Marg
+Gui, Add, Button, 		x12 y64 w90 h25 gZylem, Zylem
 Gui, Add, Button, 		x111 y64 w90 h25 gReset, Reset
 Gui, Add, GroupBox, 	x7 y99 w200 h50 , Functions :
 Gui, Add, Radio, 		x22 y119 w70 h20 vfunct gFunc, Cash Sale
@@ -54,6 +57,8 @@ GuiControl, Hide, Output
 Gui, Show, Autosize, MargAuto v%ver%
 WinMove, A_ScreenWidth - 250
 ;WinSet, Transparent, 230, MargAuto
+
+
 CheckRun:
 {
 	if not WinExist("ahk_exe margwin.exe")
@@ -81,6 +86,290 @@ WM_LBUTTONDOWN() {
 Reset:
 {
 	reload
+}
+dialog:
+{
+		WinWait, ahk_class #32770,, 1
+		if ErrorLevel
+		{
+			;tooltip, WinWait timed out.
+			WinWait, ahk_exe Excel.exe,, 1
+			if ErrorLevel
+			{
+				goto, dialog
+				;RETURN
+			}
+			Else
+			{
+			
+				if not WinExist("ahk_exe excel.exe")
+				{
+					;RETURN
+				}
+				Else
+				{
+					SLEEP 1000
+					;tooltip, found
+					WinActivate
+					return
+				}
+				;ExitApp
+			}
+
+		}
+		else
+		{
+			;tooltip, foundit
+			send !n
+			;tooltip,Closed 'Excel Open Dialog'`n\\\\\\\\\\\\
+			sleep 280
+			WinWait, ahk_exe Excel.exe,, 1
+			if ErrorLevel
+			{
+				;RETURN
+				goto, dialog
+			}
+			Else
+			{
+				
+				
+			}
+			;ELSE XCL
+			
+			goto, dialog
+			return
+		}
+	return
+}
+Zylem:
+{
+	InputBox, z_date, Enter Date, Please enter a date:, , 300, 150
+	MsgBox, 70,, Date is %z_date%.,2
+	;MsgBox, You entered %UserInput% as your username
+	if not WinExist("ahk_exe margwin.exe")
+	{
+		;RETURN
+	}
+	Else
+	{
+		WinActivate
+	}
+	;msgbox, zylem
+	sleep 400
+	send {Alt Down}
+	sleep 300
+	send r
+	sleep 300
+	send i
+	sleep 300
+	send {Enter}
+	sleep 300
+	send {Alt Up}
+	sleep 300
+	send,% z_date
+	sleep 300
+	send {Enter}
+	sleep 100
+	send {Enter}
+	sleep 100
+	send {Enter}
+	sleep 100
+	send {UP}
+	sleep 200
+	send {Enter}
+	sleep 100
+	send {Down}
+	sleep 100
+	send {Enter}
+	sleep 100
+	send {Enter}
+	sleep 100
+	send {Enter}
+	sleep 100
+	;send {Enter}
+	;sleep 100
+	send {down}
+	sleep 100
+	send {Enter}
+	sleep 100
+	send {Enter}
+	sleep 100
+	send {Enter}
+	sleep 100
+	send {Enter}
+	sleep 100
+	send {Enter}
+	sleep 200
+	send {down}
+	sleep 100
+	send {BackSpace}
+	sleep 200
+	send bect
+	sleep 200
+	send {down}
+	sleep 200
+	send {Enter}
+	sleep 300
+	send {Enter}
+	sleep 100
+	send {Enter}
+	sleep 100
+	send {Enter}
+	sleep 100
+	send {Enter}
+	sleep 200
+	send 4
+	;sleep 200
+	sleep 300
+	send {Enter}
+	sleep 300
+	send {Enter}
+	sleep 300
+	send {Enter}
+	sleep 300
+	send {Enter}
+	gosub, dialog
+	send {Alt Down}
+	sleep 300
+	send f
+	sleep 300
+	send a
+	sleep 300
+	send y
+	sleep 300
+	send 2
+	sleep 300
+	send {Alt Up}
+	SLEEP 300
+	SEND,  DC_%z_date%-%A_DD%
+	;SEND,  MDS_%z_date%-%A_DD%
+	;send {Enter}
+	sleep 300
+	send {Alt Down}
+	sleep 300
+	send s
+	send {Alt Up}
+	sleep 600
+	oWMI := ComObjGet("winmgmts:{impersonationLevel=impersonate}!\\.\root\cimv2")
+	NAme := "Excel.exe"
+	for proc in oWMI.ExecQuery("Select * from Win32_Process Where Name = '" NAme "'")
+		proc.terminate()
+	
+	if not WinExist("ahk_exe margwin.exe")
+	{
+		;RETURN
+	}
+	Else
+	{
+		WinActivate
+	}
+	;msgbox, zylem
+	sleep 400
+	send {Alt Down}
+	sleep 300
+	send r
+	sleep 300
+	send i
+	sleep 300
+	send {Enter}
+	sleep 300
+	send {Alt Up}
+	sleep 300
+	send,% z_date
+	sleep 300
+	send {Enter}
+	sleep 100
+	send {Enter}
+	sleep 100
+	send {Enter}
+	sleep 100
+	send {UP}
+	sleep 200
+	send {Enter}
+	sleep 100
+	send {Down}
+	sleep 100
+	send {Enter}
+	sleep 100
+	send {Enter}
+	sleep 100
+	send {Enter}
+	sleep 100
+	;send {Enter}
+	;sleep 100
+	send {down}
+	sleep 100
+	send {Enter}
+	sleep 100
+	send {Enter}
+	sleep 100
+	send {Enter}
+	sleep 100
+	send {Enter}
+	sleep 100
+	send {Enter}
+	sleep 200
+	send {down}
+	sleep 100
+	send {BackSpace}
+	sleep 200
+	send bect
+	sleep 200
+	;send {down}
+	;sleep 200
+	send {Enter}
+	sleep 300
+	send {Enter}
+	sleep 100
+	send {Enter}
+	sleep 100
+	send {Enter}
+	sleep 100
+	send {Enter}
+	sleep 200
+	send 4
+	;sleep 200
+	sleep 300
+	send {Enter}
+	sleep 300
+	send {Enter}
+	sleep 300
+	send {Enter}
+	sleep 300
+	send {Enter}
+	gosub, dialog
+	send {Alt Down}
+	sleep 300
+	send f
+	sleep 300
+	send a
+	sleep 300
+	send y
+	sleep 300
+	send 2
+	sleep 300
+	send {Alt Up}
+	SLEEP 300
+	;SEND,  DC_%z_date%-%A_DD%
+	SEND,  MDS_%z_date%-%A_DD%
+	;send {Enter}
+	sleep 300
+	send {Alt Down}
+	sleep 300
+	send s
+	send {Alt Up}
+	sleep 600
+	oWMI := ComObjGet("winmgmts:{impersonationLevel=impersonate}!\\.\root\cimv2")
+	NAme := "Excel.exe"
+	for proc in oWMI.ExecQuery("Select * from Win32_Process Where Name = '" NAme "'")
+		proc.terminate()
+	
+	MsgBox, ,, Reports Created!.,2
+	msgbox, debug
+	;RunWait, D:\SAPL\BECTON\BECTON_DATA_UPLOAD.BAT
+	;MsgBox, ,, Upload finished!.,5
+	RUN, "D:\SAPL\BECTON\HTTPUploadZipUnzip_Client_Becton\UPLOADED"
+	return
 }
 ;Gui, submit, nohide
 GuiControlGet,datee,,Date
