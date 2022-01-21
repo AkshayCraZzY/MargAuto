@@ -365,7 +365,7 @@ Zylem:
 		proc.terminate()
 	
 	MsgBox, ,, Reports Created!.,2
-	msgbox, debug
+	;msgbox, debug
 	;RunWait, D:\SAPL\BECTON\BECTON_DATA_UPLOAD.BAT
 	;MsgBox, ,, Upload finished!.,5
 	RUN, "D:\SAPL\BECTON\HTTPUploadZipUnzip_Client_Becton\UPLOADED"
