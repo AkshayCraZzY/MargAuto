@@ -26,7 +26,7 @@ Gui,+AlwaysOnTop +caption +LastFound +ToolWindow
 Gui, Add, GroupBox, 	x7 y4 w200 h89 , @github.com/akshaycrazzy
 Gui, Add, Button, 		x12 y24 w90 h35 gStartMarg vStart, Start Marg
 Gui, Add, Button, 		x111 y24 w90 h35 gButtonExit vClose, Close Marg
-Gui, Add, Button, 		x12 y64 w90 h25 gZylem, Zylem
+Gui, Add, Button, 		x12 y64 w90 h25 gZylem vZylemm, Zylem Report
 Gui, Add, Button, 		x111 y64 w90 h25 gReset, Reset
 Gui, Add, GroupBox, 	x7 y99 w200 h50 , Functions :
 Gui, Add, Radio, 		x22 y119 w70 h20 vfunct gFunc, Cash Sale
@@ -143,8 +143,13 @@ dialog:
 }
 Zylem:
 {
+
 	InputBox, z_date, Enter Date, Please enter a date:, , 300, 150
 	MsgBox, 70,, Date is %z_date%.,2
+	GuiControl,Text, Zylemm,Running...
+	GuiControl,Disable, Zylemm
+	;Gui, +Disabled
+	;sleep (5000)
 	;MsgBox, You entered %UserInput% as your username
 	if not WinExist("ahk_exe margwin.exe")
 	{
@@ -363,10 +368,11 @@ Zylem:
 	NAme := "Excel.exe"
 	for proc in oWMI.ExecQuery("Select * from Win32_Process Where Name = '" NAme "'")
 		proc.terminate()
-	
+	GuiControl,Enable, Zylemm
+	GuiControl,Text, Zylemm,Zylem Report
 	MsgBox, ,, Reports Created!.,2
 	;msgbox, debug
-	;RunWait, D:\SAPL\BECTON\BECTON_DATA_UPLOAD.BAT
+	RunWait, D:\SAPL\BECTON\BECTON_DATA_UPLOAD.BAT
 	;MsgBox, ,, Upload finished!.,5
 	RUN, "D:\SAPL\BECTON\HTTPUploadZipUnzip_Client_Becton\UPLOADED"
 	return
