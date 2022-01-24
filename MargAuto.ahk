@@ -23,7 +23,7 @@ OnMessage(0x201, "WM_LBUTTONDOWN")
 ;OnMessage(0x84, "WM_NCHITTEST")
 ;OnMessage(0x83, "WM_NCCALCSIZE")
 Gui,+AlwaysOnTop +caption +LastFound +ToolWindow
-Gui, Add, GroupBox, 	x7 y4 w200 h89 , @github.com/akshaycrazzy
+Gui, Add, GroupBox, 	x7 y4 w200 h89 , @Github.com/AkshayCraZzY
 Gui, Add, Button, 		x12 y24 w90 h35 gStartMarg vStart, Start Marg
 Gui, Add, Button, 		x111 y24 w90 h35 gButtonExit vClose, Close Marg
 Gui, Add, Button, 		x12 y64 w90 h25 gZylem vZylemm, Zylem Report
@@ -143,14 +143,32 @@ dialog:
 }
 Zylem:
 {
-
-	InputBox, z_date, Enter Date, Please enter a date:, , 300, 150
+	zylem_date=%A_WorkingDir%\zylem_last_date.txt
+	FileReadLine, line, %zylem_date%, 1
+    if ErrorLevel
+        FileAppend,  , %zylem_date%
+	InputBox, z_date, Enter Date, Please enter a date:`nLast date for backup was %line%., , 300, 150,,,,,%line%
 	MsgBox, 70,, Date is %z_date%.,2
+	IfMsgBox Cancel
+	{
+		Return
+	}
+	else IfMsgBox TryAgain
+	{
+		goto, Zylem
+	}
+	else IfMsgBox Continue
+	{
+
+	}
+	
 	GuiControl,Text, Zylemm,Running...
 	GuiControl,Disable, Zylemm
 	;Gui, +Disabled
 	;sleep (5000)
 	;MsgBox, You entered %UserInput% as your username
+	
+	;exitapp
 	if not WinExist("ahk_exe margwin.exe")
 	{
 		;RETURN
@@ -370,6 +388,9 @@ Zylem:
 		proc.terminate()
 	GuiControl,Enable, Zylemm
 	GuiControl,Text, Zylemm,Zylem Report
+	file := FileOpen(zylem_date, "w")
+	file.close()
+	FileAppend, %A_DD%, %zylem_date%
 	MsgBox, ,, Reports Created!.,2
 	;msgbox, debug
 	RunWait, D:\SAPL\BECTON\BECTON_DATA_UPLOAD.BAT
@@ -406,8 +427,7 @@ Func:
 		GuiControl, show, GanjOption
 		Gui, Show, Autosize
 	}
-	
-		
+
 		return
 }
 
