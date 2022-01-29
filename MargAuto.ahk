@@ -12,7 +12,7 @@ Instagram : https://www.instagram.com/akki_parakh
 SetWorkingDir %A_ScriptDir%
 #include <Vis2>
 #include <Gdip_All>
-ver=2.2
+ver=2.4
 
 golecash=%A_WorkingDir%\golecash.jpg
 stkisu=%A_WorkingDir%\stkisu.jpg
@@ -146,8 +146,10 @@ Zylem:
 	zylem_date=%A_WorkingDir%\zylem_last_date.txt
 	FileReadLine, line, %zylem_date%, 1
    	if ErrorLevel
-        	FileAppend,  , %zylem_date%
+        FileAppend,  , %zylem_date%
 	InputBox, z_date, Enter Date, Please enter a date:`nLast date for backup was %line%., , 300, 150,,,,,%line%
+	If ErrorLevel = 1
+		Return
 	MsgBox, 70,, Date is %z_date%.,2
 	IfMsgBox Cancel
 	{
