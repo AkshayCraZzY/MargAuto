@@ -145,8 +145,8 @@ Zylem:
 {
 	zylem_date=%A_WorkingDir%\zylem_last_date.txt
 	FileReadLine, line, %zylem_date%, 1
-   	if ErrorLevel
-        FileAppend,  , %zylem_date%
+	if ErrorLevel
+		FileAppend,  , %zylem_date%
 	InputBox, z_date, Enter Date, Please enter a date:`nLast date for backup was %line%., , 300, 150,,,,,%line%
 	If ErrorLevel = 1
 		Return
