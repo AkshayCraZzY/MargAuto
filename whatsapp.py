@@ -1,3 +1,11 @@
+'''
+-----------------------------------------------------
+Author : Akshay Prafull Parakh
+LinkedIn : https://www.linkedin.com/in/akshayparakh98
+Github : https://github.com/AkshayCraZzY
+Instagram : https://www.instagram.com/akki_parakh
+------------------------------------------------------
+'''
 import time
 import sys
 import os
@@ -36,7 +44,7 @@ doc=[]
 def beforesend():
     f = open("D:\\Akshay\\AHK\\num.txt", "r")
     num=(f.readline()) 
-    num=9075886656##########
+    #num=##########
     linkk=link1+str(num)+link2
     print(linkk)
     #get_status(w)
