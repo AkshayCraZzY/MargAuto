@@ -1,4 +1,3 @@
-
 /*
 -----------------------------------------------------
 Author : Akshay Prafull Parakh
@@ -47,7 +46,7 @@ tosend:=line1
 tosave:=line2
 
 
-MsgBox, 70,, Number is %tosend%`nName is %tosave%,2
+MsgBox, 70,, Number is %tosend%`nName is %tosave%,3
 IfMsgBox Cancel
 {
 	ExitApp
@@ -74,7 +73,13 @@ send {Backspace}}
 sleep 100
 send {End Up}
 send {Shift Up}
+sleep 200
+Send {Delete}
+sleep 200
+Send {Delete}
+sleep 300
 
+tooltip, %legloc%%tosave%
 sleep 200
 SendInput,%legloc%%tosave%
 SLEEP 300
@@ -195,6 +200,7 @@ dialog:
 				FormatTime, TimeString,, ddMMyy
 				PDFPath := xcl . "_" . TimeString . ".PDF"
 				sleep 600
+
 				if !FileExist(PDFPath)
    					MsgBox, The pdf file does not exist.
 				else
@@ -213,6 +219,7 @@ dialog:
 
 				log("Python script started PID: "pyid . "`n\\\\\\\\\\\\")
 				;msgbox gg
+				;SLEEP 5000
 				if FileExist("*.jpg")
 				{
 					;FileRecycle, %A_WorkingDir%\*.jpg
