@@ -12,7 +12,7 @@ Instagram : https://www.instagram.com/akki_parakh
 SetWorkingDir %A_ScriptDir%
 #include <Vis2>
 #include <Gdip_All>
-ver=2.4
+ver=2.6
 
 golecash=%A_WorkingDir%\golecash.jpg
 stkisu=%A_WorkingDir%\stkisu.jpg
@@ -27,12 +27,16 @@ Gui, Add, GroupBox, 	x7 y4 w200 h89 , @Github.com/AkshayCraZzY
 Gui, Add, Button, 		x12 y24 w90 h35 gStartMarg vStart, Start Marg
 Gui, Add, Button, 		x111 y24 w90 h35 gButtonExit vClose, Close Marg
 Gui, Add, Button, 		x12 y64 w90 h25 gZylem vZylemm, Zylem Report
-Gui, Add, Button, 		x111 y64 w90 h25 gReset, Reset
+Gui, Add, Button, 		x111 y64 w90 h25 gReset, Reload
 Gui, Add, GroupBox, 	x7 y99 w200 h50 , Functions :
 Gui, Add, Radio, 		x22 y119 w70 h20 vfunct gFunc, Cash Sale
 Gui, Add, Radio, 		x92 y119 w80 h20 vWhtsp gFunc, Whatsapp
 Gui, Add, GroupBox, 	x7 y149 w200 h50 vBranchgrp, Branch :
 Gui, Add, Radio, 		x22 y169 w50 h20 vGoleOption gBranchFunc, Gole
+
+;Gui, Add, GroupBox, 	x7 y149 w200 h50 vFormatgrp, Format :
+;Gui, Add, Radio, 		x22 y169 w50 h20 vExcelOption gExcelFunc, Excel
+
 Gui, Add, Radio, 		x75 y169 w60 h20 vNskrdOption gBranchFunc, NskRD
 Gui, Add, Radio, 		x142 y169 w55 h20 vGanjOption gBranchFunc, Ganjmal
 Gui, Add, CheckBox, 	x22 y202 w180 h20 gCusDate vDateCheck , Custom Date (Skip if Yesterday)
@@ -46,6 +50,8 @@ Gui, Add, Text, x22 y269 w180 h60 vOutput,
 
 Gui, Margin, 0, 10
 
+GuiControl, Hide, Formatgrp
+GuiControl, Hide, ExcelOption
 GuiControl, Hide, Branchgrp
 GuiControl, Hide, GoleOption
 GuiControl, Hide, NskrdOption
@@ -56,6 +62,8 @@ GuiControl, Hide, Exec
 GuiControl, Hide, Output
 Gui, Show, Autosize, MargAuto v%ver%
 WinMove, A_ScreenWidth - 250
+
+
 ;WinSet, Transparent, 230, MargAuto
 
 
@@ -143,14 +151,33 @@ dialog:
 }
 Zylem:
 {
-	zylem_date=%A_WorkingDir%\zylem_last_date.txt
-	FileReadLine, line, %zylem_date%, 1
-	if ErrorLevel
-		FileAppend,  , %zylem_date%
+	yester = %a_now%
+	yester += -1, days
+	FormatTime, yester, %yester%, dd-MM-yy 
+	
+	
+	Loop D:\SAPL\BECTON_1002374236\UPLOADED\*.*
+	{
+	 If ( A_LoopFileTimeModified >= Time )
+	 {
+		Time := A_LoopFileTimeModified
+		File := A_LoopFileLongPath 
+	 }
+	}
+	FormatTime, line, %Time%, dd'-'MM
+	;MsgBox, %line%
+	;exitapp
+	;zylem_last=%A_WorkingDir%\zylem_last_date.txt
+	;FileGetTime, zy_date , %zylem_last%, A
+	;FormatTime, mytime , %modtime%, yyyymmddhh24
+	;zylem_date=%A_WorkingDir%\zylem_last_date.txt
+	;FileReadLine, line, %zylem_date%, 1
+	;if ErrorLevel
+	;	FileAppend,  , %zylem_date%
 	InputBox, z_date, Enter Date, Please enter a date:`nLast date for backup was %line%., , 300, 150,,,,,%line%
 	If ErrorLevel = 1
 		Return
-	MsgBox, 70,, Date is %z_date%.,2
+	MsgBox, 70,, Date is %z_date% to %yester%.,2
 	IfMsgBox Cancel
 	{
 		Return
@@ -164,7 +191,7 @@ Zylem:
 
 	}
 	
-	GuiControl,Text, Zylemm,Running...
+	GuiControl,Text, Zylemm,Creating Reports
 	GuiControl,Disable, Zylemm
 	;Gui, +Disabled
 	;sleep (5000)
@@ -194,7 +221,9 @@ Zylem:
 	send,% z_date
 	sleep 300
 	send {Enter}
-	sleep 100
+	sleep 300
+	send, % yester
+	sleep 300
 	send {Enter}
 	sleep 100
 	send {Enter}
@@ -248,12 +277,16 @@ Zylem:
 	sleep 300
 	send {Enter}
 	sleep 300
+	;exitapp
+	send {Enter}
+	sleep 300
+	
 	send {Enter}
 	sleep 300
 	send {Enter}
-	sleep 300
-	send {Enter}
+	
 	gosub, dialog
+	
 	send {Alt Down}
 	sleep 300
 	send f
@@ -266,7 +299,7 @@ Zylem:
 	sleep 300
 	send {Alt Up}
 	SLEEP 300
-	SEND,  DC_%z_date%-%A_DD%
+	SEND,  Book1_DC_%z_date%-%A_DD%
 	;SEND,  MDS_%z_date%-%A_DD%
 	;send {Enter}
 	sleep 300
@@ -279,7 +312,7 @@ Zylem:
 	NAme := "Excel.exe"
 	for proc in oWMI.ExecQuery("Select * from Win32_Process Where Name = '" NAme "'")
 		proc.terminate()
-	
+	GuiControl,Text, Zylemm,Report1 Saved
 	if not WinExist("ahk_exe margwin.exe")
 	{
 		;RETURN
@@ -303,7 +336,9 @@ Zylem:
 	send,% z_date
 	sleep 300
 	send {Enter}
-	sleep 100
+	sleep 300
+	send, % yester
+	sleep 300
 	send {Enter}
 	sleep 100
 	send {Enter}
@@ -376,7 +411,7 @@ Zylem:
 	send {Alt Up}
 	SLEEP 300
 	;SEND,  DC_%z_date%-%A_DD%
-	SEND,  MDS_%z_date%-%A_DD%
+	SEND,  Book2_MDS_%z_date%-%A_DD%
 	;send {Enter}
 	sleep 300
 	send {Alt Down}
@@ -388,16 +423,23 @@ Zylem:
 	NAme := "Excel.exe"
 	for proc in oWMI.ExecQuery("Select * from Win32_Process Where Name = '" NAme "'")
 		proc.terminate()
-	GuiControl,Enable, Zylemm
-	GuiControl,Text, Zylemm,Zylem Report
+	GuiControl,Text, Zylemm,Report2 Saved
 	file := FileOpen(zylem_date, "w")
 	file.close()
 	FileAppend, %A_DD%, %zylem_date%
-	MsgBox, ,, Reports Created!.,2
+	MsgBox, 4,, Reports Created!`nContinue Upload?
+	IfMsgBox Yes
+		RUN, "D:\SAPL\BECTON_1002374236\Marg\DataPath"
+		GuiControl,Text, Zylemm,Report Uploading
+    	RunWait, D:\SAPL\BECTON_1002374236\BECTON_1002374236_ForUser_DATA_UPLOAD_BECTON.bat
+	IfMsgBox No
+		return
 	;msgbox, debug
-	RunWait, D:\SAPL\BECTON\BECTON_DATA_UPLOAD.BAT
+	
 	;MsgBox, ,, Upload finished!.,5
-	RUN, "D:\SAPL\BECTON\HTTPUploadZipUnzip_Client_Becton\UPLOADED"
+	RUN, "D:\SAPL\BECTON_1002374236\UPLOADED"
+	GuiControl,Enable, Zylemm
+	GuiControl,Text, Zylemm,Zylem Report
 	return
 }
 ;Gui, submit, nohide
@@ -806,6 +848,7 @@ if (funct = 1)
 	sleep 100
 	send {Enter}
 	sleep 300
+	;MSGBOX, CONTINUE?
 	pBitmap:=Gdip_BitmapFromScreen()
 	stckissueimg:=Gdip_CloneBitmapArea(pBitmap,1104,142,120,511) 
 	stckissuelstimg:=Gdip_CloneBitmapArea(pBitmap,954,802,110,30) 
@@ -847,7 +890,7 @@ if (funct = 1)
 		golestcisu:=val+golestcisu
 	G2=%G1%Gole Stock Issue : `t%golestcisu%`n
 	;GuiControl, ,Output,Gole Colony Stock Issue : %golestcisu%
-	;;;;;msgbox, Gole stock issue  %golestcisu%
+	;Msgbox, Gole stock issue  %golestcisu%
 	golee:=gole+golestcisu
 	SLEEP 300
 	send {Esc}
@@ -900,6 +943,19 @@ Return
 
 ButtonExit:
 {
+	if not WinExist("ahk_exe margwin.exe")
+	{
+		;RETURN	
+	}
+	Else
+	{
+		WinActivate
+		send ^q	
+	}
+	
+	sleep 1000
+	Gosub, CheckRun
+	/*
 	oWMI := ComObjGet("winmgmts:{impersonationLevel=impersonate}!\\.\root\cimv2")
 	NAme := "margwin.exe"
 	for proc in oWMI.ExecQuery("Select * from Win32_Process Where Name = '" NAme "'")
@@ -908,6 +964,22 @@ ButtonExit:
 	Gosub, CheckRun
 	;Reload
 	;ExitApp
+	*/
+	if not WinExist("ahk_exe margwin.exe")
+	{
+		;RETURN
+		send ^q
+
+	
+	}
+	Else
+	{
+		WinActivate
+		send ^q
+		
+	}
+
 	Return
 }
 return
+
