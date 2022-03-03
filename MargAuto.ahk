@@ -6,30 +6,38 @@ Github : https://github.com/AkshayCraZzY
 Instagram : https://www.instagram.com/akki_parakh
 ------------------------------------------------------
 */
+
 #NoEnv    
 #Persistent
 #SingleInstance, Force
 SetWorkingDir %A_ScriptDir%
 #include <Vis2>
 #include <Gdip_All>
-ver=2.6
-
-golecash=%A_WorkingDir%\golecash.jpg
+ver=2.7		;CURRENT VERSION
+golecash=%A_WorkingDir%\golecash.jpg	;IMAGES FOR OCR PATHS
 stkisu=%A_WorkingDir%\stkisu.jpg
 stkisulst=%A_WorkingDir%\stkisulst.jpg
-pToken:=Gdip_Startup()
+counter_file=%A_WorkingDir%\counter.txt
+pToken:=Gdip_Startup()		;SCREENSHOT SERVICE STARTUP
 SetKeyDelay, 50
-OnMessage(0x201, "WM_LBUTTONDOWN")
-;OnMessage(0x84, "WM_NCHITTEST")
-;OnMessage(0x83, "WM_NCCALCSIZE")
-Gui,+AlwaysOnTop +caption +LastFound +ToolWindow
-Gui, Add, GroupBox, 	x7 y4 w200 h89 , @Github.com/AkshayCraZzY
+;OnMessage(0x201, "WM_LBUTTONDOWN")
+FileReadLine, countt, %counter_file%, 1
+new_count := countt + 1
+FileDelete, %counter_file%
+FileAppend, %new_count%, %counter_file%
+Gui,+AlwaysOnTop +Caption +LastFound +ToolWindow	;TOOLWINDOW-HIDES MAX AND MIN BUTTON FROM GUI
+Gui, Font, s9 
+Gui, Add, Text,			x13 y4,Load count : 
+Gui, Add, Text,			x80 y4 vCounterrr gResetCounter, %new_count%    | 
+Gui, Add, Link,			x112 y4,By <a href="https://github.com/AkshayCraZzY">Akshay Parakh</a>
+;Gui, Add, GroupBox, 	x7 y4 w200 h89 , @Github.com/AkshayCraZzY
+Gui, Font, s10 Normal
 Gui, Add, Button, 		x12 y24 w90 h35 gStartMarg vStart, Start Marg
 Gui, Add, Button, 		x111 y24 w90 h35 gButtonExit vClose, Close Marg
-Gui, Add, Button, 		x12 y64 w90 h25 gZylem vZylemm, Zylem Report
+Gui, Add, Button, 		x12 y64 w90 h25 gZylem vZylemm, BD Report
 Gui, Add, Button, 		x111 y64 w90 h25 gReset, Reload
-Gui, Add, GroupBox, 	x7 y99 w200 h50 , Functions :
-Gui, Add, Radio, 		x22 y119 w70 h20 vfunct gFunc, Cash Sale
+Gui, Add, GroupBox, 	x7 y99 w200 h50,  Functions :
+Gui, Add, Radio, 		x22 y119 w70 h20 vfunct gFunc, Sales
 Gui, Add, Radio, 		x92 y119 w80 h20 vWhtsp gFunc, Whatsapp
 Gui, Add, GroupBox, 	x7 y149 w200 h50 vBranchgrp, Branch :
 Gui, Add, Radio, 		x22 y169 w50 h20 vGoleOption gBranchFunc, Gole
@@ -38,14 +46,14 @@ Gui, Add, Radio, 		x22 y169 w50 h20 vGoleOption gBranchFunc, Gole
 ;Gui, Add, Radio, 		x22 y169 w50 h20 vExcelOption gExcelFunc, Excel
 
 Gui, Add, Radio, 		x75 y169 w60 h20 vNskrdOption gBranchFunc, NskRD
-Gui, Add, Radio, 		x142 y169 w55 h20 vGanjOption gBranchFunc, Ganjmal
-Gui, Add, CheckBox, 	x22 y202 w180 h20 gCusDate vDateCheck , Custom Date (Skip if Yesterday)
+;Gui, Add, Radio, 		x142 y169 w55 h20 vGanjOption gBranchFunc, Ganjmal
+Gui, Add, CheckBox, 	x22 y202 w180 h20 gCusDate vDateCheck , Custom Date?
 ;custdate:=A_DD-3
 custdate:=A_DD-2 . "/" . A_MM
 ;Gui, Add, Edit, x24 y229 w170 h21 r1 vDate, %custdate%/%A_MM%
 Gui, Add, Edit, x22 y222 w170 h20 r1 vDate, %custdate%
 Gui, Add, Button, x32 y224 w140 h35 vExec gMain Default , Execute
-Gui, Add, Text, x22 y269 w180 h60 vOutput,
+Gui, Add, Text, x12 y269 w180 h60 vOutput,
 ;Gui, Add, Text, x22 y289 w180 h30 vOutput, Output :
 
 Gui, Margin, 0, 10
@@ -60,21 +68,25 @@ GuiControl, Hide, Date
 GuiControl, Hide, DateCheck
 GuiControl, Hide, Exec
 GuiControl, Hide, Output
-Gui, Show, Autosize, MargAuto v%ver%
+Gui, Show, Autosize , MargAuto v%ver%
 WinMove, A_ScreenWidth - 250
 
 
 ;WinSet, Transparent, 230, MargAuto
 
-
 CheckRun:
 {
+	notlogged=0
 	if not WinExist("ahk_exe margwin.exe")
 	{
 		GuiControl,Enable, Start
 		GuiControl,Text, Close,Marg Not Running
 		GuiControl,Text, Start,Start Marg
 		GuiControl,Disable, Close
+		GuiControl,Disable, funct
+		GuiControl,Disable, whtsp
+		GuiControl,Disable, Zylemm
+	
 		RETURN
 	}
 	Else
@@ -83,17 +95,124 @@ CheckRun:
 		GuiControl,Text, Start,Marg Running
 		GuiControl,Text, Close,Close Marg
 		GuiControl,Enable, Close
+		GuiControl,Enable,funct
+		GuiControl,Enable,whtsp
+		GuiControl,Enable,Zylemm
+		;1.875x, 1.406y
+		;;1810,354
+		x=1271
+		y=71
+		ser_x=851;1.4935
+		ser_y=274;0.2591
+		WinActivate
+		PixelGetColor, color, %x%, %y%
+		;MsgBox The color at the current cursor position is %color%.
+		WinGetTitle, title,A
+		If InStr(title, "AAA")
+		{
+			firstrun=0
+		}
+		Else
+		{
+			firstrun=1
+		}
+		
+		
+		If InStr(title, "AAA")
+		{
+			if (A_ScreenWidth = 1024 and A_ScreenHeight = 768 and A_Username = "Administrator")
+			{
+				;ser_x:=x / ratiox
+				
+				;ser_y:=y / ratioy
+				GuiControl,Text, Zylemm,BD Report
+				;msgbox, %ser_x% . %ser_y%
+				;MouseMove, ser_x,ser_y
+	
+				PixelSearch, Px, Py, ser_x, ser_y, ser_x+2, ser_y+2, 0xDDDDDD, 1, Fast
+				if ErrorLevel
+					notlogged=1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+				Else	
+					tooltip, logged in server
+				
+				
+			}
+			Else
+			{
+				GuiControl,Disable, Zylemm
+				GuiControl,Text, Zylemm,Server only
+				PixelSearch, Px, Py, x, y, x+2, y+2, 0xDDDDDD, 1, Fast
+				if ErrorLevel
+					notlogged=1
+				Else	
+					tooltip, logged in LAPTOP
+			}
+			;MSGbox, % notlogged
+			if (notlogged != 0)
+			{
+				tooltip, loggin in
+				send {ctrl down}
+				sleep 300
+				send u
+				sleep 300
+				send {ctrl up}
+				sleep 300
+				send {Backspace}
+				sleep 300
+				send Akshay
+				sleep 300
+				send {Enter}
+				sleep 300
+				send 123
+				sleep 300
+				send {Enter}
+				sleep 100
+				send {Enter}
+				sleep 100
+				send {Enter}
+				sleep 100
+				send {Enter}
+				sleep 100
+				send {Enter}
+				sleep 100
+				send {Enter}
+				sleep 100
+				send {Enter}
+			}
+		}
+		
+		tooltip, 
 		RETURN
 	}
+
+
 	return
 }
+/*
 WM_LBUTTONDOWN() {
 	PostMessage, 0xA1, 2
 }
-
+*/
 Reset:
 {
 	reload
+}
+ResetCounter:
+{
+	;Gui, Font, cBlue
+
+	GuiControl, Text, Counterrr, 1
+	
+	msgbox, Counter Reset Done!
+	gosub, ResetCounter2
+	return
+}
+
+ResetCounter2:
+{
+	FileDelete, %counter_file%
+	FileAppend, 1, %counter_file%
+	return
 }
 dialog:
 {
@@ -530,19 +649,34 @@ StartMarg:
 	Startmrg()
 	{
 		Process,Close,ServerManager.exe
-		;msgbox yes
 		Run,D:\MARGERP\margwin.exe,D:\MARGERP
+	
 		sleep 3000
 		Gosub, CheckRun
 
 		sleep 1000
 		;728,735
+		x=540
+		y=745
 
-		PixelSearch, Px, Py, 540, 745, 545, 750, 0xC8C8C8, 3, Fast
-		if ErrorLevel
-			MouseClick,left,845,273
-		else
-			Send {Enter}
+		;;;250,560 SERVER
+
+		if (A_ScreenWidth = 1024 and A_ScreenHeight = 768 and A_Username = "Administrator")
+		{
+			PixelSearch, Px, Py, 250, 560, 255, 565, 0xC8C8C8, 3, Fast
+			if ErrorLevel
+				MouseClick,left,576,234
+			else
+				Send {Enter}
+		}
+		Else
+		{
+			PixelSearch, Px, Py, 540, 745, 545, 750, 0xC8C8C8, 3, Fast
+			if ErrorLevel
+				MouseClick,left,845,273
+			else
+				Send {Enter}	
+		}
 
 		;MouseClick,left,758,735
 		;sleep 800
@@ -960,8 +1094,9 @@ ButtonExit:
 	NAme := "margwin.exe"
 	for proc in oWMI.ExecQuery("Select * from Win32_Process Where Name = '" NAme "'")
 		proc.terminate()
-	sleep 1000
+	sleep 3000
 	Gosub, CheckRun
+	
 	;Reload
 	;ExitApp
 	*/
