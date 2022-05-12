@@ -1,3 +1,11 @@
+/*
+-----------------------------------------------------
+Author : Akshay Prafull Parakh
+LinkedIn : https://www.linkedin.com/in/akshayparakh98
+Github : https://github.com/AkshayCraZzY
+Instagram : https://www.instagram.com/akki_parakh
+------------------------------------------------------
+*/
 #NoEnv    
 #Persistent
 #SingleInstance, Force
@@ -71,13 +79,13 @@ else
 
 AccClick()
 {
-  pass1=0211
+  pass1=####
   pass2=!
-  pass3=S
-  pass4=b
-  pass5=K
-  pass6=b
-  pass7=1998
+  pass3=#
+  pass4=#
+  pass5=#
+  pass6=#
+  pass7=####
   mar=D:\MARGERP\margwin.exe
   servscript=D:\Akshay\AHK\RUN.ahk
   ;sleep 100
